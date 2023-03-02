@@ -1,0 +1,1 @@
+{"id":null,"name":"重新生成所有分类页面","status":0,"cronExpression":"0 * * * ?","description":"每小时执行","updateDate":null,"filePath":"/publishCategory.task"}
