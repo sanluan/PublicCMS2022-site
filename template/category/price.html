@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>${(attribute.title)!category.name}</title>
+        <title>${(attribute.title)?has_content?then(attribute.title,category.name)}</title>
         <meta name="keywords" content="${(attribute.keywords)!}"/>
         <meta name="description" content="${(attribute.description)!}"/>
         <@tools.includePlace path="/common/8ddab9ba-a8aa-4745-86c6-66bf1c2c976c.html"/> <#-- header -->
@@ -11,14 +11,14 @@
 
         <div class="banner-l2 position-relative d-flex align-items-center justify-content-center" data-diy="category" data-diy-id="${category.id}">
             <div class="container text-center position-relative py-3 py-md-4">
-                <div class="display-3 fw-bolder">${category.name}</div>
+                <div class="display-5 fw-bolder">${category.name}</div>
                 <p class="text-secondary m-0">${(attribute.description)!}</p>
                 <img src="${getAbsoluteUrl(site.sitePath,attribute.left_image)!}" class="position-absolute bottom-0" style="left: 8%;height: ${attribute.left_height!}%;">
                 <img src="${getAbsoluteUrl(site.sitePath,attribute.right_image)!}" class="position-absolute bottom-0" style="right: 0%;height: ${attribute.right_height!}%;">
             </div>
         </div>
 
-        <div class="container mt-5">
+        <div class="container">
 			 <div class="row">
                 <div class="col-12 d-flex justify-content-center my-5">
                     <ul class="nav nav-pills nav-l2" data-diy="child-category">
@@ -43,7 +43,7 @@
                     <div class="text-center">
                         <img src="${site.sitePath}assets/img/icon-price-product.svg" alt="product">
                         <h2 class="my-2">产品价格</h2>
-                        <p class="text-secondary opacity-50">V4.0(及后续版本)个人免费使用，企事业单位使用需要付费</p>
+                        <p class="text-secondary opacity-50">V4.0、V5(及后续版本)个人免费使用，企事业单位使用需要付费，价格变动将在该页面提前三个月通知</p>
                     </div>
                     <div class="mt-4">
                         <table class="table price">
@@ -64,7 +64,7 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">域名限制</th>
-                                    <td>单个域名</td>
+                                    <td>单个域名 / 多个域名</td>
                                     <td>单个域名 / 局域网</td>
                                     <td>不限域名</td>
                                     <td>不限域名</td>
@@ -85,13 +85,13 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">发票</th>
-                                    <td>不提供</td>
-                                    <td colspan="3" class="text-center">普票、专票、电子发票</td>
+                                    <td>-</td>
+                                    <td colspan="3" class="text-center">普票、专票、电子普票、全电发票</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="text-center py-3 mb-5">
+                    <div class="text-center py-3 mb-4">
                         <p class="fs-8 text-secondary text-opacity-50">
                             单域名商业授权为顶级域名比如 publiccms.com 授权，也可以在其二级域名下使用<br/>
                             授权单位为网站主办者,单域名商业授权、不限域名商业授权单位可以将自己购买的授权授予下属不具备法人资格的分支机构如分公司，子部门使用,无权将自己购买的授权授予子公司及其他单位使用<br/>
@@ -122,17 +122,15 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">发票</th>
-                                    <td>普票、专票、电子发票</td>
-                                    <td>普票、专票、电子发票</td>
-                                    <td>普票、专票、电子发票</td>
+                                    <td colspan="3" class="text-center">普票、专票、电子普票、全电发票</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="text-center py-3 mb-5">
+                    <div class="text-center py-3 mb-4">
                         <p class="fs-8 text-secondary text-opacity-50">
                             我们只提供网站制作过程中的模板制作（可包含切图）部分服务，<br/>
-                            不承接含有二次开发、网站设计的项目，如果您没有设计或技术团队，或以上报价超出您的预算，请选择其他服务商提供网站制作服务。
+                            不承接含有二次开发、网站设计、仿站的项目，如果您没有设计或技术团队，或以上报价超出您的预算，请选择其他服务商提供网站制作服务。
                         </p>
                     </div>
                 </div>

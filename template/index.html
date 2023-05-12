@@ -2,8 +2,8 @@
 <html lang="zh">
     <head>
         <title>${(metadata.extendData.title)!} </title>
-        <meta name="keywords" content="${(metadata.extendData.keywords)!}"/>
-        <meta name="description" content="${(metadata.extendData.description)!}"/>
+        <meta name="keywords" content="${(metadata.extendData.keywords)!}">
+        <meta name="description" content="${(metadata.extendData.description)!}">
         <@tools.includePlace path="/common/8ddab9ba-a8aa-4745-86c6-66bf1c2c976c.html"/> <#-- header -->
 		<@tools.includePlace path="/ff78be16-6f75-42b3-b115-d9d9cf578f1c.html"/> <#-- 首页置灰控制 -->
 		<link href="${site.sitePath}assets/swiper/swiper.min.css" rel="stylesheet">
@@ -21,10 +21,10 @@
                         <div class="fs-0 fw-bolder lh-sm">
                             更先进的内容管理系统
                         </div>
-                        <div class="col-md-9 mt-2 mb-5">
+                        <div class="col-md-9 mt-2 mb-4">
                             PublicCMS 是采用2023年主流技术开发的开源 Java CMS 产品，为您的网站建设提供强大驱动，也是企业级项目产品原型的良好选择。
                         </div>
-                        <div>
+                        <div class="mb-4">
 							<@cms.category code='admin'>
                             <a href="${object.url}" target="_blank" class="d-inline-flex btn rounded-pill bg-white py-2 px-4 me-3 align-items-center">
                                 <img src="${site.sitePath}assets/img/icon-demo.svg" class="me-2" alt="查看演示"> 查看演示
@@ -74,11 +74,18 @@
 					clickable: true,
 				},
 				slidesPerView: 3,
+				slidesPerGroup:3,
 				spaceBetween: 0,
 				breakpoints: {
 					768: {
 						slidesPerView: 1,
 						spaceBetween: 0,
+						slidesPerGroup:1
+					},
+					1024: {
+						slidesPerView: 2,
+						spaceBetween: 0,
+						slidesPerGroup:2
 					}
 				},
 				autoplay: {

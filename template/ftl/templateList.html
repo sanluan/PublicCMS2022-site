@@ -1,0 +1,10 @@
+<#list page.list as a>
+	<div class="col-md-4">
+		<a href="${a.url}" target="_blank" class="card align-items-center rounded-3 pt-3 px-3 mb-3 animate__animated animate__backInUp" data-diy-item="${a.id}">
+			<img src="${getUrl(a.cover)!}" alt="${a.title}" style="height:10rem;">
+			<h3 class="mt-3 text-body">${a.title}</h3>
+			<p class="text-secondary mb-1"><@cms.tag ids=a.tagIds><#list map as k,tag>${tag.name}<#sep>,</#list></@cms.tag></p>
+			<p class="text-secondary text-opacity-50">${(a.description)!}</p>
+		</a>
+	</div>
+</#list>

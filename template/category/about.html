@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>${(attribute.title)!category.name}</title>
+        <title>${(attribute.title)?has_content?then(attribute.title,category.name)}</title>
         <meta name="keywords" content="${(attribute.keywords)!}"/>
         <meta name="description" content="${(attribute.description)!}"/>
         <@tools.includePlace path="/common/8ddab9ba-a8aa-4745-86c6-66bf1c2c976c.html"/> <#-- header -->
@@ -11,7 +11,7 @@
 
         <div class="banner-l2 position-relative d-flex align-items-center justify-content-center" data-diy="category" data-diy-id="${category.id}">
             <div class="container text-center position-relative py-3 py-md-4">
-                <div class="display-3 fw-bolder">${category.name}</div>
+                <div class="display-5 fw-bolder">${category.name}</div>
                 <p class="text-secondary m-0">${(attribute.description)!}</p>
                 <#if category.parentId?has_content>
                     <#assign attribute1=getCategoryAttribute(category.parentId)/>

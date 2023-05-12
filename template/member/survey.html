@@ -1,4 +1,3 @@
-<@cms.survey id=id;survey>
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
@@ -39,9 +38,12 @@
                     <#assign available=false/>
                     <p>您已经参与过了!</p>
                     </@cms.userSurvey>
-                    <#else>
+                    <#elseif !survey.allowAnonymous>
                     <#assign available=false/>
-                    <p class="user-login">请<a href="${site.dynamicPath}member/login.html">登录</a></p>
+						<p class="user-login">请<a href="${site.dynamicPath}member/login.html">登录</a></p>
+					<#elseif dataId?has_content>
+						<#assign available=false/>
+						<p>您已经参与过了!</p>
                     </#if>
                     <form action="${site.dynamicPath}member/survey/save" method="POST">
                         <input name="_csrf" type="hidden" value="<@tools.csrfToken/>"/>
@@ -110,4 +112,3 @@
         <@tools.includePlace path="/footer/7f8bacb5-30ca-4641-b66f-987d447b1a85.html"/> <#-- footer -->
     </body>
 </html>
-</@cms.survey>

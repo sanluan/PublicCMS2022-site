@@ -123,7 +123,7 @@
                             </@sys.extendFieldList>
                         </#if>
                         <#if (firstModel.extendList)?has_content>
-                            <@dictionarySearch firstModel.extendList/>
+                            <@dictionarySearch firstModel.extendList?filter(extend -> extend.inputType = 'dictionary' && extend.searchable)/>
                         </#if>
                     </div>
 

@@ -58,7 +58,7 @@
                     <@cms.contentList parentId=a.id orderType='asc' pageIndex=n pageSize=20>
                         <div class="row mt-4">
                         <#list page.list as a>
-                            <div class="col-md-3 text-truncate"><a href="${a.url!}">${a.title}</a></div>
+                            <div class="col-md-3 text-truncate" data-item="${a.id}"><a href="${a.url!}">${a.title}</a></div>
                         </#list>
                         </div>
                     </@cms.contentList>

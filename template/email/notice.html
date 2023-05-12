@@ -11,7 +11,7 @@
 		<@cms.contentList advanced=true startPublishDate=dealDate pageSize=10>
 			<#list page.list as a>
 		<p>新投稿：${a.title}</p>
-		<p>内容：${(getContentAttribute(a.id).text)!}</p>
+		<p>内容：${getTextFromHtml(getContentAttribute(a.id).text)!}</p>
 			</#list>
 		</@cms.contentList>
 		<@trade.orderList startCreateDate=dealDate pageSize=10>

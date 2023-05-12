@@ -32,7 +32,7 @@
                         <ul class="article-list">
                             <#list page.list as a>
                             <li class="card py-2 mb-2">
-                                <p><a href="${contentMap[a.contentId?string].url}" target="_blank">${contentMap[a.contentId?string].title}</a><span class="float-end text-secondary">${a.createDate?string('yyyy-MM-dd hh:mm')}</span></p>
+                                <p><a href="${(contentMap[a.contentId?string].url)!}" target="_blank">${(contentMap[a.contentId?string].title)!}</a><span class="float-end text-secondary">${a.createDate?string('yyyy-MM-dd hh:mm')}</span></p>
                                 <#if a.replyId?has_content>
                                     <@cms.comment id=a.replyId>
                                         <p class="ms-5"><a href="${site.dynamicPath}member/user.html?id=${a.replyUserId!}" target="_blank">@${userMap[a.replyUserId?string].nickname}</a> : ${object.text!}</p>
@@ -43,7 +43,7 @@
                             </#list>
                         </ul>
                     </#if>
-					<#assign url=site.dynamicPath+'user.html?id='+user.id/>
+					<#assign url='user.html?id='+user.id/>
 					<ul class="pagination mt-5 overflow-auto pb-3">
 						<li class="page-item">
 							<a class="page-link" href="${getPage(url,page.prePage,'pageIndex')}" aria-label="Previous">

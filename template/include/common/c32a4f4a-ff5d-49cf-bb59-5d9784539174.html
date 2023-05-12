@@ -11,8 +11,17 @@
             <@cms.categoryList>
             <ul class="navbar-nav ms-auto fs-6p" data-diy="category">
                 <#list page.list as a>
-                <li class="nav-item" data-id="${a.id}" data-diy-item="${a.id}">
+                <li class="nav-item<#if a.childIds?has_content> dropdown</#if>" data-id="${a.id}" data-diy-item="${a.id}">
                     <a class="nav-link" href="${a.url}">${a.name}</a>
+					<#if a.childIds?has_content>
+						<@cms.categoryList parentId=a.id>
+					<ul class="dropdown-menu">
+						<#list page.list as a>
+						<li><a class="dropdown-item" href="${a.url}"<#if a.onlyUrl> ref="nofollow" target="_blank"</#if> data-id="${a.id}" data-diy-item="${a.id}" >${a.name}</a></li>
+						</#list>
+					</ul>
+						</@cms.categoryList>
+					</#if>
                 </li>
                 </#list>
             </ul>

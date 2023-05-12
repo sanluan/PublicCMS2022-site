@@ -96,6 +96,23 @@
                     </ul>
                     <div class="tab-content">
                         <article class="tab-pane fade clearfix  show active" id="content" data-diy="content" data-diy-id="${content.id}">
+							 <div>
+								<table class="w-100">
+									<thead>
+										<tr>
+											<th>商品属性</th>
+                    						<th>值</th>
+										</tr>
+									</thead>
+									<tbody>
+										<#list attribute.property?split(",")?chunk(2) as row>
+											<tr>
+												<#list row as a><td>${a}</td></#list>
+											</tr>
+										</#list>
+									</tbody>
+								</table>
+							</div>
                             ${text?no_esc!}
                         </article>
                         <div class="tab-pane fade py-4" id="comment">

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh">
     <head>
-        <title>${(attribute.title)!category.name}</title>
+        <title>${(attribute.title)?has_content?then(attribute.title,category.name)}</title>
         <meta name="keywords" content="${(attribute.keywords)!}"/>
         <meta name="description" content="${(attribute.description)!}"/>
         <@tools.includePlace path="/common/8ddab9ba-a8aa-4745-86c6-66bf1c2c976c.html"/> <#-- header -->
@@ -11,7 +11,7 @@
 		
         <div class="banner-l2 position-relative d-flex align-items-center justify-content-center" data-diy="category" data-diy-id="${category.id}">
             <div class="container text-center position-relative py-3 py-md-4">
-                <div class="display-3 fw-bolder">${category.name}</div>
+                <div class="display-5 fw-bolder">${category.name}</div>
                 <p class="text-secondary m-0">${(attribute.description)!}</p>
                 <#if category.parentId?has_content>
                     <#assign attribute=getCategoryAttribute(category.parentId)/>
@@ -22,12 +22,12 @@
         </div>
 
         <div class="container mt-5">
-            <div class="row justify-content-center">
-                <div class="col-12">
+            <div class="row justify-content-between">
+                <div class="col-md-7">
                     <@cms.categoryList parentId=category.id>
                     <div class="row row-cols-2 row-cols-md-6 g-4 g-md-5 pt-md-4 qa-list"  data-diy="child-category">
                         <#list page.list as a>
-                        <div class="col">
+                        <div class="col-md-4">
                             <a href="${a.url}" rel="nofollow" target="_blank">
                                 <#assign attribute=getCategoryAttribute(a.id)/>
                                 <img src="${getAbsoluteUrl(site.sitePath,attribute.cover)!}" alt="${a.name!}" class="img-fluid">
@@ -37,6 +37,11 @@
                     </div>
                     </@cms.categoryList>
                 </div>
+				<aside class="col-md-4">
+					<@tools.includePlace path="/54f5253d-d008-4e5c-b3b6-95158bce8dca.html"/> <#-- 最新评论 -->
+					<@tools.includePlace path="/17fbfe62-4fbe-4987-93d5-85383ebc5aa4.html"/> <#-- 最新投票 -->
+					<@tools.includePlace path="/3fefc879-2ef2-448d-909f-dc31849bcf29.html"/> <#-- 最新调查问卷 -->
+				</aside>
             </div>
         </div>
 

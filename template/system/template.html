@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8">
+        <title>${content.title} - ${category.name}</title>
+        <meta name="keywords" content="<#list getKeywords(content.title) as a>${a}<#sep>,</#list>"/>
+        <meta name="description" content="${content.description!}"/>
+        <@tools.includePlace path="/common/8ddab9ba-a8aa-4745-86c6-66bf1c2c976c.html"/> <#-- header -->
+    </head>
+    <body>
+        <@tools.includePlace path="/common/c32a4f4a-ff5d-49cf-bb59-5d9784539174.html"/> <#-- 导航 -->
+
+        <div class="banner-l3 position-relative d-flex align-items-center justify-content-center" style="background:#22407c url(${site.sitePath}assets/img/banner-l3-bg-1.png) 50% 50% no-repeat;">
+            <div class="container text-center position-relative py-3 py-md-4 text-white">
+                <div class="breadcrumbs fs-7 text-white d-inline-flex align-items-center text-opacity-50"  data-diy="category" data-diy-id="${category.id}">
+                    <@include path="/ftl/bread.ftl"/><#-- 面包屑导航 -->
+                </div>
+                <h1 class="my-4" data-diy="content" data-diy-id="${content.id}"><a href="${url!}" class="text-white">${content.title}</a></h1>
+                <footer class="fs-8 text-white text-opacity-50 d-flex align-items-center justify-content-center">
+					<#if attribute.source?has_content><span class="me-4 d-inline-flex align-items-center"><a href="${attribute.sourceUrl!}" class="text-white" target="_blank">${attribute.source}</a></span></#if>
+                    <span class="me-4 d-inline-flex align-items-center"><img src="${site.sitePath}assets/img/icon-calendar.svg">${content.publishDate?date}</span>
+                    <span class="me-4 d-inline-flex align-items-center"><img src="${site.sitePath}assets/img/icon-view.svg"><span id="clicks">loading</span></span>
+                    <a href="#comments" data-diy="comment"><span class="me-4 d-inline-flex align-items-center text-white"><img src="${site.sitePath}assets/img/icon-comment.svg">${content.comments!}</span></a>
+                </footer>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-9 pe-4">
+                    <article class="article-cont mt-5" data-diy="content" data-diy-id="${content.id}">
+                        <div class="clearfix" id="content">
+                            ${(text?no_esc)!}
+                        </div>
+                    <#if content.hasFiles>
+                        <@cms.contentFileList contentId=content.id fileTypes='video,audio,other'>
+                            <#list page.list as file>
+                        <p><a href="${(file.filePath)!}" target="_blank">${(file.description)!}</a> </p>
+                            </#list>
+                        </@cms.contentFileList>
+                    </#if>
+                    <#if content.hasImages>
+                         <@cms.contentFileList contentId=content.id fileTypes='image'>
+                             <#list page.list as file>
+                                 <figure class="text-center">
+                                     <img src="${(file.filePath)!}" alt="${(file.description)!}"/>
+                                     <p>图${file?counter} ${(file.description)!}</p>
+                                </figure>
+                             </#list>
+                         </@cms.contentFileList>
+                    </#if>
+						<p><@cms.tag ids=content.tagIds><#if map?has_content>标签:</#if><#list map?keys as k><a href="${siteAttribute.searchPath!}?tagIds=${k}" target="_blank">${map[k].name}</a><#sep>,</#list></@cms.tag></p>
+                    </article>
+                    <#if page?? && page.totalCount gt 1>
+                        <ul class="pagination mt-5 overflow-auto pb-3">
+                            <li class="page-item">
+                                <a class="page-link" href="${getPage(url,page.prePage)}" aria-label="Previous">
+                                    <span aria-hidden="true">«</span>
+                                </a>
+                            </li>
+                            <#list 1..page.totalCount as a>
+                                <li class="page-item<#if a=page.pageIndex> active</#if>"><a class="page-link" href="${getPage(url,a)}">${a}</a></li>
+                            </#list>
+                            <li class="page-item">
+                                <a class="page-link" href="${getPage(url,page.nextPage)}" aria-label="Next">
+                                    <span aria-hidden="true">»</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </#if>
+                    <@include path="/ftl/comment.ftl"/><#-- 评论 -->
+                </div>
+				<aside class="col-md-3 px-2 mt-5">
+					<header class="tab-header fs-5">
+						<b class="pb-2">下载链接</b>
+					</header>
+					<div class="article-list-side pt-4 fs-7 mb-4 text-center">
+						<a href="${getUrl(attribute.file)!}" class="btn btn-primary rounded-pill px-3" title="${content.title}">下载</a>
+					</div>
+					<header class="tab-header fs-5">
+						<b class="pb-2">高级版本</b>
+					</header>
+					<div class="article-list-side pt-4 fs-7 mb-4">
+						<#if !attribute.advancefile?has_content>该模板未提供高级付费版本</#if>
+					</div>
+					<header class="tab-header fs-5">
+						<b class="pb-2">使用方法</b>
+					</header>
+					<div class="article-list-side pt-4 fs-7 mb-4">
+						在站点->站点模板中上传,供所有站点使用，或在开发->模板文件管理中导入整个站点
+					</div>
+				</aside>
+            </div>
+        </div>
+
+        <script>
+            var itemString="itemType=content&itemId=${content.id}";
+		var templatePath='${.current_template_name?keep_after('/')}';
+		</script>
+        <@tools.includePlace path="/footer/7f8bacb5-30ca-4641-b66f-987d447b1a85.html"/> <#-- footer -->
+        <script src="${site.sitePath!}assets/ueditor/ueditor.parse.min.js"></script>
+        <script>
+        $.getJSON('${site.dynamicPath!}api/contentClick?id=${content.id}', function(data){
+			if(data.clicks > 100000){
+               $('#clicks').text("10万+");
+			} else if(data.clicks <10000){
+                $('#clicks').text(data.clicks);
+			} else {
+				 $('#clicks').text(((data.clicks/10000)|0)+"万+");
+            }
+        });
+        uParse('#content',{rootPath: '${site.sitePath!}assets/ueditor/'});
+        </script>
+    </body>
+</html>

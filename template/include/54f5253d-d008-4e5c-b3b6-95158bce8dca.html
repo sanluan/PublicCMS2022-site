@@ -4,7 +4,7 @@
 	</header>
 <@cms.commentList pageSize=3>
 	<@import path="/ftl/tools.ftl" namespace="t"/><#-- 工具 -->
-	<ul class="comments-list px-0 pt-4" data-diy="comment">
+	<ul class="comments-list px-0 pt-4 mb-4" data-diy="comment">
 		<#list page.list as a>
 		<@t.merge 'userIds' a.userId!/>
 		<@t.merge 'userIds' a.replyUserId!/>

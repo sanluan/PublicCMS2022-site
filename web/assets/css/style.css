@@ -15,6 +15,7 @@ a:hover {color:#0a58ca;}
 .btn-white:hover {color:#4E80E0;background-color:#F0F3FA;border-color:#F0F3FA;}
 .bg-purple {--bs-bg-opacity:1;background-color:var(--bs-purple) !important;}
 .text-muted {color:#8492a6 !important;}
+::selection{text-decoration: underline;text-decoration-style: dotted;background-color:#3A6CCB33;}
 
 #index-header{background:url(../img/index-header.svg) 50% -80px repeat-x;}
 #index-header::before{content:"";width:100%;height:700px;background-color:#3A6CCB;position:absolute;top:-1px;left:0;z-index:-1;}
@@ -98,13 +99,13 @@ a:hover {color:#0a58ca;}
 
 .comment{position:relative;margin:0 0 2rem;}
 .comment figure{width:36px;height:36px;margin:0 0.5rem 0 0;overflow:hidden;}
-.comment figure img{width:100%;}
+.comment figure img{width:100%;height:100%;}
 .comment p{color:#8492a6;margin:0.5rem 0 0;}
 aside .comment{font-size:14px;margin-bottom:1em;}
 aside .comment p a{color:#333;max-height: 3.5em;overflow: hidden;}
 aside .comment p a:hover{color:#3a6ccb;}
 #content{overflow:auto;max-width:100%;word-break: break-word;}
-#content img,#content table,#content video{max-width:100%;}
+#content img,#content video{max-width:100%;}
 #comments ul.child{padding:30px 0 0 50px;}
 #comments ul.child li.comment::before{height:30px;width:20px;border-radius:0 0 0 10px;border-left:1px solid #eee;border-bottom:1px solid #eee;display:block;content:"";position:absolute;left:-30px;top:-10px;}
 #comments textarea::placeholder{text-align:center;line-height:2.25rem;}
@@ -120,7 +121,7 @@ aside .comment p a:hover{color:#3a6ccb;}
 .modal-backdrop.show{opacity:0.62;}
 
 .nav-facet .nav-link{padding:5px 10px;}
-
+.result-box{min-height:15rem;}
 .user-login{display:none;}
 .thumb-list img{width:100%;}
 

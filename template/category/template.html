@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>${(attribute.title)?has_content?then(attribute.title,category.name)}</title>
+        <meta name="keywords" content="${(attribute.keywords)!}"/>
+        <meta name="description" content="${(attribute.description)!}"/>
+        <@tools.includePlace path="/common/8ddab9ba-a8aa-4745-86c6-66bf1c2c976c.html"/> <#-- header -->
+    </head>
+    <body>
+        <@tools.includePlace path="/common/c32a4f4a-ff5d-49cf-bb59-5d9784539174.html"/> <#-- 导航 -->
+
+        <div class="banner-l2 position-relative d-flex align-items-center justify-content-center" data-diy="category" data-diy-id="${category.id}">
+            <div class="container text-center position-relative py-3 py-md-4">
+                <div class="display-5 fw-bolder">${category.name}</div>
+                <p class="text-secondary m-0">${(attribute.description)!}</p>
+				<#if category.parentId?has_content>
+                    <#assign attribute=getCategoryAttribute(category.parentId)/>
+                </#if>
+                <img src="${getAbsoluteUrl(site.sitePath,attribute.left_image)!}" class="position-absolute bottom-0" style="left: 8%;height: ${attribute.left_height!}%;">
+                <img src="${getAbsoluteUrl(site.sitePath,attribute.right_image)!}" class="position-absolute bottom-0" style="right: 0%;height: ${attribute.right_height!}%;">
+            </div>
+        </div>
+
+        <div class="container">
+			<div class="row">
+                <div class="col-12 d-flex justify-content-center my-5">
+                    <ul class="nav nav-pills nav-l2" data-diy="child-category">
+                    <@cms.category id=category.parentId!category.id>
+                        <li class="nav-item" data-diy-item="${object.id}">
+                            <a class="nav-link<#if object.id=category.id> active</#if>" aria-current="page" href="${object.url!}">${object.name}</a>
+                        </li>
+                    </@cms.category>
+                    <@cms.categoryList parentId=category.parentId!category.id>
+                        <#list page.list as a>
+                        <li class="nav-item" data-diy-item="${a.id}">
+                            <a class="nav-link<#if a.id=category.id> active</#if>" href="${a.url}">${a.name!}</a>
+                        </li>
+                        </#list>
+                    </@cms.categoryList>
+                    </ul>
+                </div>
+            </div>
+			<form name="condition" action="${site.dynamicPath}json/template.html" method="get" onsubmit="return search(this);">
+				
+				<div class="my-3">
+					<input type="hidden" name="id" value="${category.id}">
+					<input type="hidden" name="pageIndex">	
+					<@cms.tagType ids=category.tagTypeIds>
+					<#list map as k,tagType>
+					<div class="d-flex align-items-center my-3">						
+						<@cms.tagList typeId=k>
+							<b class="flex-shrink-0">${tagType.name}：</b>
+							<ul class="nav nav-pills nav-facet">
+								<#list page.list as tag>
+								<li class="nav-item">
+									<label class="form-check-label me-2">
+										<input name="tagIds" class="form-check-input me-1" type="checkbox" value="${tag.id}">
+										${tag.name}
+									</label>
+								</li>
+								</#list>
+							</ul>
+						</@cms.tagList>
+					</div>
+					</#list>
+					</@cms.tagType>
+					<@cms.dictionary id="cmsversion";dict>
+					<div class="d-flex align-items-center my-3">
+						<b class="flex-shrink-0">${dict.name}：</b>
+						<@cms.dictionaryDataList dictionaryId=dict.id.id>
+						<ul class="nav nav-pills nav-facet">
+							<#list list as a>
+							<li class="nav-item">
+								<label class="form-check-label me-2">
+									<input name="version" class="form-check-input me-1" type="checkbox" value="${a.id.value}">
+									${a.text}
+								</label>
+							</li>
+							</#list>
+						</ul>
+						</@cms.dictionaryDataList>
+					</div>
+					</@cms.dictionary>
+				</div>
+			</form>
+			<div class="row">
+				<@import path="/ftl/tools.ftl" namespace="t"/><#-- 工具 -->
+        		<@cms.contentList categoryId=category.id pageSize=category.pageSize>
+				<div class="col-md-12 result-box">
+					<div class="row" data-diy="content">
+						<@include path="/ftl/templateList.html"/><#-- 模板文件列表 -->
+					</div>
+					<ul class="pagination mt-5 overflow-auto pb-3" data-diy="task">
+                        <li class="page-item">
+                            <a class="page-link" href="${getPage(url,page.prePage)}" aria-label="Previous">
+                                <span aria-hidden="true">«</span>
+                            </a>
+                        </li>
+                        <#assign start=1/>
+                        <#if (page.pageIndex-5) gt start>
+                            <#assign start=page.pageIndex-4/>
+                        </#if>
+						<#assign max=page.totalPage/>
+						<#if 100 lt max>
+						<#assign max=100/>
+						</#if>
+                        <#assign end=max/>
+                        <#if (page.pageIndex+5) lt end>
+                            <#assign end=page.pageIndex+4/>
+                        </#if>
+						<#if start gt 1>
+							<li class="page-item"><a class="page-link" href="${getPage(url,1)}">1</a></li>
+							<li class="page-item"><span>...</span></li>
+						</#if>
+                        <#list start..end as a>
+                        <li class="page-item<#if a=page.pageIndex> active</#if>"><a class="page-link" href="${getPage(url,a)}">${a}</a></li>
+                        </#list>
+						<#if end lt max>
+						<li class="page-item"><span>...</span></li>
+						<li class="page-item"><a class="page-link" href="${getPage(url,max)}">${max}</a></li>
+						</#if>
+                        <li class="page-item">
+                            <a class="page-link" href="${getPage(url,page.nextPage)}" aria-label="Next">
+                                <span aria-hidden="true">»</span>
+                            </a>
+                        </li>
+                    </ul>
+				</div>
+				</@cms.contentList>
+			</div>
+		</div>
+
+        <script>
+            var itemString="itemType=category&itemId=${category.id}";
+			var templatePath='${.current_template_name?keep_after('/')}';
+        </script>
+        <@tools.includePlace path="/footer/7f8bacb5-30ca-4641-b66f-987d447b1a85.html"/> <#-- footer -->
+		<script>
+			function search(pageIndex){
+				var $form=$('form[name=condition]');
+				$('.result-box').empty();
+				$form.find('input[name=pageIndex]').val(pageIndex);
+				$.get($form.attr('action')+'?'+$form.serialize(),function(result){
+					$result = $(result);
+					$('.result-box').append($result.children());
+				});
+			}
+			$('form[name=condition] input[type=checkbox]').click(function(){
+				search(1);
+			});
+            $('.navbar-nav .nav-item[data-id=${category.parentId!category.id}]').addClass('selected');
+        </script>
+    </body>
+</html>

@@ -1,0 +1,16 @@
+<@cms.category id=metadata.extendData.category;category>
+<div class="container mt-5 pt-3" data-diy="place" data-diy-id="${path}">
+	<div class="mb-4 pb-2 text-center">
+		<div class="fs-1 text-black fw-bold">${category.name}</div>
+		<p class="text-black-50">${(getCategoryAttribute(category.id).description)!}</p>
+	</div>
+	<@cms.contentList categoryId=category.id containChild=true pageSize=3>
+	<div class="row justify-content-between" data-diy="content">
+		<@include path="/ftl/templateList.html"/><#-- 模板文件列表 -->		
+	</div>
+	</@cms.contentList>
+	<div class="py-4 text-center">
+		<a href="${category.url}" class="d-inline-flex align-items-center">查看更多${category.name} <img src="${site.sitePath}assets/img/icon-more.svg" alt="more"></a>
+	</div>
+</div>
+</@cms.category>

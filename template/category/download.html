@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>${(attribute.title)!category.name}</title>
+        <title>${(attribute.title)?has_content?then(attribute.title,category.name)}</title>
         <meta name="keywords" content="${(attribute.keywords)!}"/>
         <meta name="description" content="${(attribute.description)!}"/>
         <@tools.includePlace path="/common/8ddab9ba-a8aa-4745-86c6-66bf1c2c976c.html"/> <#-- header -->
@@ -11,8 +11,11 @@
 
         <div class="banner-l2 position-relative d-flex align-items-center justify-content-center" data-diy="category" data-diy-id="${category.id}">
             <div class="container text-center position-relative py-3 py-md-4">
-                <div class="display-3 fw-bolder">${category.name}</div>
+                <div class="display-5 fw-bolder">${category.name}</div>
                 <p class="text-secondary m-0">${(attribute.description)!}</p>
+				<#if category.parentId?has_content>
+                    <#assign attribute=getCategoryAttribute(category.parentId)/>
+                </#if>
                 <img src="${getAbsoluteUrl(site.sitePath,attribute.left_image)!}" class="position-absolute bottom-0" style="left: 8%;height: ${attribute.left_height!}%;">
                 <img src="${getAbsoluteUrl(site.sitePath,attribute.right_image)!}" class="position-absolute bottom-0" style="right: 0%;height: ${attribute.right_height!}%;">
             </div>
@@ -20,11 +23,29 @@
 
         <div class="container">
 			<div class="row">
+                <div class="col-12 d-flex justify-content-center my-5">
+                    <ul class="nav nav-pills nav-l2" data-diy="child-category">
+                    <@cms.category id=category.parentId!category.id>
+                        <li class="nav-item" data-diy-item="${object.id}">
+                            <a class="nav-link<#if object.id=category.id> active</#if>" aria-current="page" href="${object.url!}">${object.name}</a>
+                        </li>
+                    </@cms.category>
+                    <@cms.categoryList parentId=category.parentId!category.id>
+                        <#list page.list as a>
+                        <li class="nav-item" data-diy-item="${a.id}">
+                            <a class="nav-link<#if a.id=category.id> active</#if>" href="${a.url}">${a.name!}</a>
+                        </li>
+                        </#list>
+                    </@cms.categoryList>
+                    </ul>
+                </div>
+            </div>
+			<div class="row">
 				<div class="col-md-9">
 					<@import path="/ftl/tools.ftl" namespace="t"/><#-- 工具 -->
         			<@cms.contentList categoryId=category.id pageSize=category.pageSize>
 					<div class="row" data-diy="content">
-						<div class="col-12 d-flex justify-content-center my-5">
+						<div class="col-12 d-flex justify-content-center mb-4">
 							<ul class="nav nav-pills nav-l2" role="tablist">
 								<#list page.list as a>
 								<li class="nav-item" data-diy-item="${a.id}">
@@ -45,11 +66,11 @@
 										<span class="fw-normal text-secondary fs-7 ms-3">${a.description!}</span>
 									</dt>
 									<#assign attribute=getContentAttribute(a.id)/>
-									<@tools.fileList type='file' path=attribute.dir orderField='fileSize'>
+									<@tools.fileList type='file' path=attribute.dir orderField="modifiedDate">
 									<#list list as a>
 									<#if !a.directory>
 									<dd class="d-flex justify-content-between mb-0 py-3 flex-column flex-md-row flex-column flex-md-row">
-										<div class="fs-6p"><a href="${site.sitePath}${attribute.dir+'/'+a.fileName?url}" target="_blank">${a.fileName}</a></div>
+										<div class="fs-6p"><a href="${getUrl(attribute.dir+'/'+a.fileName?url)}" target="_blank">${a.fileName}</a></div>
 										<div class="text-secondary text-opacity-50">
 											<span>${a.lastModifiedTime?datetime}</span>
 											<span class="ms-5"><@t.fileSize a.size/></span>

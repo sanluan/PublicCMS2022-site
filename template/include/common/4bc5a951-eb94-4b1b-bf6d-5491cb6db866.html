@@ -1,0 +1,21 @@
+<div class="text-center mt-3 text-white">
+	<h5>热门搜索</h5>
+	<div class="keywords mt-2" data-diy="place" data-diy-id="${path}">
+			<#list page.list as a>
+			<a href="${siteAttribute.searchPath!}?word=${a.title?url}">${a.title}</a>
+			</#list>
+		<@cms.wordList count=20>
+			<#list page.list as a>
+			<a href="${siteAttribute.searchPath!}?word=${a.name?url}">${a.name}</a>
+			</#list>
+		</@cms.wordList>
+	</div>
+	<h5>热门标签</h5>
+	<@cms.tagList orderField='searchCount' count=20>
+	<div class="keywords mt-2">
+		<#list page.list as a>
+		<a href="${siteAttribute.searchPath!}?tagIds=${a.id?url}">${a.name}</a>
+		</#list>
+	</div>
+	</@cms.tagList>
+</div>

@@ -22,27 +22,36 @@
                         <#if result?has_content&&!error?has_content>
                             <p style="color:red">提交成功，请等待管理员审核！</p>
                         <#else>
-                            <form method="post" action="${site.dynamicPath}content/save" onsubmit="return check();">
+                            <form method="post" name="contribute" action="${site.dynamicPath}content/save" onsubmit="return check();">
                                 <input type="hidden" name="_csrf" value="<@tools.csrfToken/>"/>
                                 <input name="returnUrl" type="hidden" value="${site.dynamicPath}member/case.html?result=true" />
                                 <input name="categoryId" type="hidden" value="19"/>
                                 <input name="modelId" type="hidden" value="article"/>
                                 <input name="author" type="hidden" value="${(user.nickname)!}"/>
-                                <p><label class="input-label">案例名:</label><input name="title" type="text" size="30" maxlength="255"/></p>
-                                <p><label class="input-label">案例介绍:</label><textarea name="text" style="width:60%;height:200px;"></textarea></p>
+                                <p><label class="input-label">案例名称:</label><input name="title" type="text" size="30" maxlength="255" placeholder="案例名"/></p>
+                                <p>
+									<label class="input-label">案例介绍:</label>
+									<textarea name="text" class="editor" style="width:100%;height:200px;"></textarea>
+								</p>
                                 <p>
                                     <label class="input-label">建设单位名:</label>
-                                    <input name="categoryExtendDataList[0].name" type="hidden" value="builder"/>
-                                    <input name="categoryExtendDataList[0].value" type="text" size="30" value=""/>
+                                    <input name="extendData[builder]" type="text" size="30" value=""/>
                                 </p>
                                 <p>
                                     <label class="input-label">显示建设单位:</label>
-                                    <input name="categoryExtendDataList[1].name" type="hidden" value="show"/>
-                                    <select class="combox" name="categoryExtendDataList[1].value">
+                                    <select class="combox" name="extendData[show]">
                                         <option value="true">是</option>
                                         <option value="false" selected="true">否</option>
                                     </select>
                                 </p>
+								<@sys.configData code="safe">
+									<#if object.captcha?has_content && object.captcha?split(",")?seq_contains("contribute")>
+								<p>
+									<input name="captcha" required="true" type="text" autocomplete="off" placeholder="Captcha" title="Captcha"/>
+									<img src="${site.dynamicPath}getCaptchaImage?${.now?long}" alt="captcha" onclick="this.src=this.src+'&'+new Date().getTime()"/>
+								</p>
+									</#if>
+								</@sys.configData>
                                 <p><input class="btn btn-primary" type="submit" value="提交"/></p>
                             </form>
                         </#if>
@@ -63,15 +72,30 @@
 			var templatePath='${.current_template_name?keep_after('/')}';
 		</script>
         <@tools.includePlace path="/footer/7f8bacb5-30ca-4641-b66f-987d447b1a85.html"/> <#-- footer -->
+		<script src="${site.dynamicPath}resource/js/loadscripts.js"></script>
         <script>
-            $(function(){$('.login-form input').eq(0).focus();});
-            function check(){
+		var editors = document.querySelectorAll(".editor");
+		if(editors.length){
+			window.UEDITOR_HOME_URL = "${site.dynamicPath}resource/plugins/ueditor/";
+			var base="${site.dynamicPath}";
+			loadScripts(["${site.dynamicPath}resource/plugins/ueditor/ueditor.config.js","${site.dynamicPath}resource/plugins/ueditor/ueditor.all.min.js","${site.dynamicPath}resource/plugins/ueditor/lang/zh-cn/zh-cn.js"],function(){
+				window.UEDITOR_CONFIG.topOffset=0;
+				for(var i=0;i<editors.length;i++){
+					var editor = new baidu.editor.ui.Editor();
+					editor.render(editors[i]);
+				}
+				document.querySelector("form[name=contribute]").onsubmit=function(){
+					for(var i=0;i<editors.length;i++){
+						UE.getEditor(editors[i]).sync();
+					}
                 if(!$('input[name=title]').val()||!$('textarea[name=text]').val()){
-                    alert('案例名和案例网址不能为空');
+						alert('案例名和案例介绍不能为空');
                     return false;
                 }
                 return true;
             }
+			});
+		}
         </script>
     </body>
 </html>

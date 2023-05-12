@@ -1,4 +1,3 @@
-<@cms.vote id=id;vote>
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
@@ -31,7 +30,7 @@
                         <#list page.list as v>
                         <li>
                             <div class="progress-box">
-                                <div class="progress-bar" style="width:${(vote.votes gt 0 && (!available || myvote?has_content))?then(v.votes*100/vote.votes,100)}%;"></div>
+                                <div class="progress-bar" style="width:${(vote.votes gt 0)?then(v.votes*100/vote.votes,100)}%;"></div>
                                 <div class="progress-text">
                                     <#if available>
                                     <#if myvote?has_content>
@@ -41,7 +40,7 @@
                                     ${v.title} (${v.votes!} 票)
                                     </#if>
                                     <#else>
-                                    <a href="<#if user?has_content>javascript:vote('${v.id}');<#else>${site.dynamicPath}member/login.html?returnUrl=${site.dynamicPath}member/vote.html?id=${vote.id}</#if>" title="投票后查看">${v.title}</a>
+                                    	<a href="<#if vote.allowAnonymous || user?has_content>javascript:vote('${v.id}');<#else>${site.dynamicPath}login.html?returnUrl=${site.dynamicPath}vote.html?id=${vote.id}</#if>" title="投票">${v.title}</a>
                                     </#if>
                                     <#else>
                                     ${v.title} <span class="float-end">${v.votes*100/vote.votes}%</span>
@@ -59,7 +58,9 @@
 				<div class="article-list">
 					<#list page.list as a>
 						<@t.merge 'itemIds' a.itemId!/>
+						<#if !a.anonymous>
 						<@t.merge 'userIds' a.id.userId!/>
+						</#if>
 					</#list>
 					<@sys.user ids=t.userIds!><#assign userMap=map!/></@sys.user>
 					<@cms.voteItem ids=t.itemIds! ><#assign voteItemMap=map!/></@cms.voteItem>
@@ -67,11 +68,15 @@
 					<div class="card py-2 mb-2 comment">
 						<div class="d-flex align-items-center">
 							<figure class="rounded-circle">
-								<img alt="${userMap[a.id.userId?string].nickname}" src="${userMap[a.id.userId?string].cover!(site.sitePath+'assets/img/logo-graphic.png')}">
+								<img alt="${(userMap[a.id.userId?string].nickname)!'匿名用户'}" src="${(userMap[a.id.userId?string].cover)!getUrl('assets/img/logo-graphic.png')}">
 							</figure>
 							<div>
-								<a href="${site.dynamicPath}member/userVoteList.html?id=${a.id.userId}" class="fw-bold me-2">${userMap[a.id.userId?string].nickname}</a><span></span>
-								<div class="text-secondary text-opacity-50 fs-8"> ${a.createDate?date} </div>
+								<#if a.anonymous>
+									来自${(getIpRegion(a.ip).province)!}的匿名用户
+								<#else>
+								<a href="${site.dynamicPath}userVoteList.html?id=${a.id.userId}" class="fw-bold me-2">${userMap[a.id.userId?string].nickname}</a><span></span>
+								</#if>
+								<div class="text-secondary text-opacity-50 fs-8"> ${a.createDate?string('yyyy-MM-dd HH:mm')} </div>
 							</div>
 						</div>
 						<p class="mt-2">
@@ -82,7 +87,7 @@
 					<div class="card">没有数据</div>
 					</#list>
 				</div>
-				<#assign url=site.dynamicPath+'vote.html?id='+vote.id/>
+				<#assign url='vote.html?id='+vote.id/>
 				<ul class="pagination mt-5 overflow-auto pb-3">
 					<li class="page-item">
 						<a class="page-link" href="${getPage(url,page.prePage,'pageIndex')}" aria-label="Previous">
@@ -115,7 +120,7 @@
 		</script>
         <@tools.includePlace path="/footer/7f8bacb5-30ca-4641-b66f-987d447b1a85.html"/> <#-- footer -->
         <script>
-            <#if user?has_content>
+            <#if vote.allowAnonymous || user?has_content>
         function vote(itemId){
             $.getJSON('${site.dynamicPath!}vote/vote?itemId='+itemId+'&_csrf=<@tools.csrfToken/>', function(data){
                 alert("投票成功!");
@@ -132,4 +137,3 @@
         </script>
     </body>
 </html>
-</@cms.vote>

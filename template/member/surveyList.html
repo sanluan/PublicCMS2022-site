@@ -16,21 +16,21 @@
             </div>
         </div>
         <div class="container">
-            <h3 class="mt-4">调查问卷列表</h3>
+            <h3 class="mt-4 mb-3">调查问卷列表</h3>
     <#macro message code>${springMacroRequestContext.getMessage(code)}</#macro>
     <@cms.surveyList pageIndex=pageIndex pageSize=10>
             <ul>
         <#list page.list as a>
                 <li>
-                    <h3>[<@message 'page.survey.type.'+a.surveyType/>] <a href="survey.html?id=${a.id}">${a.title!}</a></h3>
-                    <p>${a.votes!} 人参与,截止日期:${(a.endDate)!}</p>
+                    <p class="text-body mb-1">[<@message 'page.survey.type.'+a.surveyType/>] <a href="survey.html?id=${a.id}">${a.title!}</a></p>
+                    <p>${a.votes!} 人参与,<#if .now gt a.endDate>已截止<#else>截止:${(a.endDate)?string('yyyy-MM-dd')}</#if></p>
                     <p>${a.description!}</p>
                 </li>
         </#list>
             </ul>
             <ul class="pagination mt-5 overflow-auto pb-3">
                 <#assign
-                    url=site.dynamicPath+'surveyList.html'
+                    url='surveyList.html'
                     start=1
                     end=page.totalPage
                 />
@@ -49,20 +49,16 @@
                     <a href="${url}">1</a> ...
                 </#if>
                 <#list start..end as n>
-                    <#if n=page.pageIndex>
-                        ${n}
-                    <#else>
-                        <a href="${getPage(url,n,'pageIndex')}">${n}</a>
-                    </#if>
+                    <li class="page-item<#if n=page.pageIndex> active</#if>"><a class="page-link" href="${getPage(url,n,'pageIndex')}">${n}</a></li>
                 </#list>
                 <#if end lt page.totalPage>
                     ... <a href="${getPage(url,page.totalPage,'pageIndex')}">${page.totalPage}</a>
                 </#if>
-                <#if !page.lastPage>
-                    <a href="${getPage(url,page.nextPage,'pageIndex')}">下一页</a>
-                <#else>
-                    <span>下一页</span>
-                </#if>
+				<li class="page-item">
+					<a class="page-link" href="${getPage(url,page.nextPage,'pageIndex')}" aria-label="Next">
+						<span aria-hidden="true">»</span>
+					</a>
+				</li>
             </ul>
     </@cms.surveyList>
         </div>
